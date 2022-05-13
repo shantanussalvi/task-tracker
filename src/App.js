@@ -4,6 +4,9 @@ import AddTask from './components/AddTask';
 import { useState } from 'react'
 
 function App() {
+  const [showAdd, setShowAdd] = useState(false)
+
+
   const [tasks, setTask] = useState([{
     id: 1,
     text: "Meeting",
@@ -23,6 +26,13 @@ function App() {
     reminder: false
   }])
 
+  const addTask = (task) => {
+    const id = tasks.length + 1
+    console.log(id)
+    const newTask = {id, ...task}
+    setTask([...tasks, newTask])
+  }
+
   const deleteTask = (id) => {
     setTask(tasks.filter((task) => task.id !== id))
   }
@@ -33,8 +43,8 @@ function App() {
 
   return (
     <div className="container">
-      <Header />
-      <AddTask />
+      <Header onAdd = {() => setShowAdd(!showAdd)}  show = {showAdd}/>
+      {showAdd ? <AddTask onAdd = {addTask}/> : ""}
       {tasks.length > 0 ? (<Tasks tasks = {tasks} onDelete = {deleteTask} onToggle = {toggleReminder} />) : ("No tasks to show")}
     </div>
   );
